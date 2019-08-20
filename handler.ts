@@ -16,6 +16,11 @@ export const hello: APIGatewayProxyHandler = async (event, _context) => {
   });
 }
 
+export const postPlugin: APIGatewayProxyHandler = async (event, _context) => {
+  const result = await PluginDbAgent.createPlugin(event);
+  return generateResponse(200, result);
+}
+
 export const getPlugin: APIGatewayProxyHandler = async (event, _context) => {
   const result = await PluginDbAgent.getPlugin(event);
   return generateResponse(200, result);

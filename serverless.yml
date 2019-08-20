@@ -31,9 +31,15 @@ functions:
       - http:
           method: get
           path: hello
+  postPlugin:
+    handler: handler.postPlugin
+    events:
+      - http:
+          method: post
+          path: plugin
   getPlugin:
     handler: handler.getPlugin
     events:
       - http:
-          path: plugin/{id}
           method: get
+          path: plugin/{id}

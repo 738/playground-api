@@ -1,5 +1,8 @@
 {
     "resource": "/",
-    "path": "plugin/0",
-    "httpMethod": "GET"
+    "path": "/plugin",
+    "httpMethod": "GET",
+    "pathParameters": {
+        "id": "48ddd961-d639-46ec-8424-431d0ed4476f"
+    }
 }
