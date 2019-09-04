@@ -22,16 +22,7 @@ class PluginDbAgent {
                     }
                 }
             }
-            // console.log(event);
-            // let result = await docClient.get(params);
-            const result = await new Promise((resolve, reject) => {
-                docClient.put(params, function (err, data) {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve(data);
-                });
-            })
+            const result = await docClient.put(params).promise();
 
             return {
                 resultCode: 0,
@@ -52,16 +43,7 @@ class PluginDbAgent {
                     plugin_id: event.pathParameters.id,
                 }
             }
-            // console.log(event);
-            // let result = await docClient.get(params);
-            const result = await new Promise((resolve, reject) => {
-                docClient.get(params, function (err, data) {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve(data);
-                });
-            })
+            const result = await docClient.get(params).promise();
 
             if (isEmpty(result)) {
                 return {
