@@ -43,3 +43,45 @@ functions:
       - http:
           method: get
           path: plugin/{id}
+  getAllPlugin:
+    handler: handler.getAllPlugin
+    events:
+      - http:
+          method: get
+          path: plugin-all
+  deletePlugin:
+    handler: handler.deletePlugin
+    events:
+      - http:
+          method: post
+          path: plugin-delete
+  updatePlugin:
+    handler: handler.updatePlugin
+    events:
+      - http:
+          method: post
+          path: plugin-update
+  postUser:
+    handler: handler.postUser
+    events:
+      - http:
+          method: post
+          path: user
+  getUser:
+    handler: handler.getUser
+    events:
+      - http:
+          method: get
+          path: user/{id}
+  deleteUser:
+    handler: handler.deleteUser
+    events:
+      - http:
+          method: post
+          path: user-delete
+  updateUser:
+    handler: handler.updateUser
+    events:
+      - http:
+          method: post
+          path: user-update
