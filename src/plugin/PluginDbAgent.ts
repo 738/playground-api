@@ -15,6 +15,7 @@ class PluginDbAgent {
                 Item: {
                     "plugin_id": uuidv4(),
                     "name": item.name,
+                    "authorId": item.authorId,
                     "description": item.description,
                     "index_html": item.index_html,
                     "index_js": item.index_js,
@@ -152,9 +153,9 @@ class PluginDbAgent {
                 Key: {
                     "plugin_id": plugin_id,
                 },
-                UpdateExpression: '',
-                ConditionExpression: '',
-                ExpressionAttributeValues: update_attributes
+                UpdateExpression: "set name = :n, authorId = :a, description = :d, index_html = :h, index_js = :j, manifest = :m",
+                ExpressionAttributeValues: update_attributes,
+                ReturnValues: "UPDATED_NEW"
             }
             const result = await new Promise((resolve, reject) => {
                 docClient.update(params, function (err, data) {
