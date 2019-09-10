@@ -1,36 +1,33 @@
 import * as AWS from 'aws-sdk';
 import { isEmpty } from '../util/GeneralUtil';
-const uuidv4 = require('uuid/v4');
 
 const docClient = new AWS.DynamoDB.DocumentClient({ region: 'ap-northeast-2' });
 
-const table = "plgr-plugin";
+const table = "User";
 
-class PluginDbAgent {
-    async createPlugin(event: any): Promise<any> {
+class UserDbAgent {
+    async createUser(event: any): Promise<any> {
         try {
             const item = JSON.parse(event.body);
+            const { user_id } = item;
             let params = {
                 TableName: table,
                 Item: {
-                    "plugin_id": uuidv4(),
-                    "name": item.name,
-                    "authorId": item.authorId,
-                    "description": item.description,
-                    "index_html": item.index_html,
-                    "index_js": item.index_js,
-                    "manifest": item.manifest,
-                    "desc": {
-                        "test": "test_value",
-                        "rating": 0
-                    }
+                    "user_id": user_id,
                 }
             }
-            const result = await docClient.put(params).promise();
+            const result = await new Promise((resolve, reject) => {
+                docClient.put(params, function (err, data) {
+                    if (err) {
+                        reject(err);
+                    }
+                    resolve(data);
+                });
+            })
 
             return {
                 resultCode: 0,
-                resultMessage: 'createPlugin 성공',
+                resultMessage: 'createUser 성공',
                 data: result
             };
         }
@@ -39,41 +36,16 @@ class PluginDbAgent {
         }
     }
 
-    async getPlugin(event: any): Promise<any> {
+    async getUser(event: any): Promise<any> {
         try {
             let params = {
                 TableName: table,
                 Key: {
-                    plugin_id: event.pathParameters.id,
+                    user_id: event.pathParameters.id,
                 }
-            }
-            const result = await docClient.get(params).promise();
-
-            if (isEmpty(result)) {
-                return {
-                    resultCode: 1,
-                    resultMessage: '존재하지 않는 플러그인입니다.'
-                }
-            } else {
-                return {
-                    resultCode: 0,
-                    resultMessage: 'success',
-                    data: result
-                };
-            }
-        }
-        catch (err) {
-            return { resultCode: 99, test: event.pathParameters.id, resultMessage: err };
-        }
-    }
-
-    async getAllPlugin(event: any): Promise<any> {
-        try {
-            let params = {
-                TableName: table,
             }
             const result = await new Promise((resolve, reject) => {
-                docClient.scan(params, function (err, data) {
+                docClient.get(params, function (err, data) {
                     if (err) {
                         reject(err);
                     }
@@ -84,7 +56,7 @@ class PluginDbAgent {
             if (isEmpty(result)) {
                 return {
                     resultCode: 1,
-                    resultMessage: 'failed'
+                    resultMessage: '존재하지 않는 유저입니다.'
                 }
             } else {
                 return {
@@ -98,15 +70,14 @@ class PluginDbAgent {
             return { resultCode: 99, test: event.pathParameters.id, resultMessage: err };
         }
     }
-
-    async deletePlugin(event: any): Promise<any> {
+    async deleteUser(event: any): Promise<any> {
         try {
             const item = JSON.parse(event.body);
-            const { plugin_id } = item;
+            const { user_id } = item;
             let params = {
                 TableName: table,
                 Key: {
-                    "plugin_id": plugin_id,
+                    "user_id": user_id,
                 }
             }
             const result = await new Promise((resolve, reject) => {
@@ -120,7 +91,7 @@ class PluginDbAgent {
 
             return {
                 resultCode: 0,
-                resultMessage: 'deletePlugin 성공',
+                resultMessage: 'deleteUser 성공',
                 data: result
             };
         }
@@ -128,20 +99,15 @@ class PluginDbAgent {
             return { resultCode: 99, resultMessage: err };
         }
     }
-    async updatePlugin(event: any): Promise<any> {
+    async updateUser(event: any): Promise<any> {
         try {
             const item = JSON.parse(event.body);
-            const { plugin_id } = item;
-            delete item.plugin_id;
-            const update_attributes = item;
+            const { user_id } = item;
             let params = {
                 TableName: table,
                 Key: {
-                    "plugin_id": plugin_id,
-                },
-                UpdateExpression: "set name = :n, authorId = :a, description = :d, index_html = :h, index_js = :j, manifest = :m",
-                ExpressionAttributeValues: update_attributes,
-                ReturnValues: "UPDATED_NEW"
+                    "user_id": user_id,
+                }
             }
             const result = await new Promise((resolve, reject) => {
                 docClient.update(params, function (err, data) {
@@ -154,7 +120,7 @@ class PluginDbAgent {
 
             return {
                 resultCode: 0,
-                resultMessage: 'updatePlugin 성공',
+                resultMessage: 'deleteUser 성공',
                 data: result
             };
         }
@@ -165,4 +131,4 @@ class PluginDbAgent {
 
 }
 
-export default new PluginDbAgent();
+export default new UserDbAgent();
