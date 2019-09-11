@@ -20,10 +20,6 @@ class PluginDbAgent {
                     "index_html": item.index_html,
                     "index_js": item.index_js,
                     "manifest": item.manifest,
-                    "desc": {
-                        "test": "test_value",
-                        "rating": 0
-                    }
                 }
             }
             const result = await docClient.put(params).promise();
@@ -71,6 +67,7 @@ class PluginDbAgent {
         try {
             let params = {
                 TableName: table,
+                ProjectionExpression: "plugin_id",
             }
             const result = await docClient.scan(params).promise();
 
@@ -118,15 +115,20 @@ class PluginDbAgent {
         try {
             const item = JSON.parse(event.body);
             const { plugin_id } = item;
-            delete item.plugin_id;
-            const update_attributes = item;
             let params = {
                 TableName: table,
                 Key: {
                     "plugin_id": plugin_id,
                 },
                 UpdateExpression: "set name = :n, authorId = :a, description = :d, index_html = :h, index_js = :j, manifest = :m",
-                ExpressionAttributeValues: update_attributes,
+                ExpressionAttributeValues: {
+                    ':n': item.name,
+                    ':a': item.authorId,
+                    ':d': item.description,
+                    ':h': item.index_html,
+                    ':j': item.index_js,
+                    ':m': item.manifest
+                },
                 ReturnValues: "UPDATED_NEW"
             }
             const result = await docClient.update(params).promise();
