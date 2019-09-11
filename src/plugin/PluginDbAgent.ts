@@ -72,14 +72,7 @@ class PluginDbAgent {
             let params = {
                 TableName: table,
             }
-            const result = await new Promise((resolve, reject) => {
-                docClient.scan(params, function (err, data) {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve(data);
-                });
-            })
+            const result = await docClient.scan(params).promise();
 
             if (isEmpty(result)) {
                 return {
@@ -109,14 +102,7 @@ class PluginDbAgent {
                     "plugin_id": plugin_id,
                 }
             }
-            const result = await new Promise((resolve, reject) => {
-                docClient.delete(params, function (err, data) {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve(data);
-                });
-            })
+            const result = await docClient.delete(params).promise();
 
             return {
                 resultCode: 0,
@@ -143,14 +129,7 @@ class PluginDbAgent {
                 ExpressionAttributeValues: update_attributes,
                 ReturnValues: "UPDATED_NEW"
             }
-            const result = await new Promise((resolve, reject) => {
-                docClient.update(params, function (err, data) {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve(data);
-                });
-            })
+            const result = await docClient.update(params).promise();
 
             return {
                 resultCode: 0,
