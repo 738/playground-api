@@ -6,6 +6,9 @@ import UserDbAgent from './src/user/UserDbAgent';
 export function generateResponse(statusCode, body) {
   return {
     statusCode,
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    },
     body: JSON.stringify(body, null, 2),
   }
 }
