@@ -16,14 +16,7 @@ class UserDbAgent {
                     "user_id": user_id,
                 }
             }
-            const result = await new Promise((resolve, reject) => {
-                docClient.put(params, function (err, data) {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve(data);
-                });
-            })
+            const result = await docClient.put(params).promise();
 
             return {
                 resultCode: 0,
@@ -44,14 +37,7 @@ class UserDbAgent {
                     user_id: event.pathParameters.id,
                 }
             }
-            const result = await new Promise((resolve, reject) => {
-                docClient.get(params, function (err, data) {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve(data);
-                });
-            })
+            const result = await docClient.get(params).promise();
 
             if (isEmpty(result)) {
                 return {
@@ -80,14 +66,7 @@ class UserDbAgent {
                     "user_id": user_id,
                 }
             }
-            const result = await new Promise((resolve, reject) => {
-                docClient.delete(params, function (err, data) {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve(data);
-                });
-            })
+            const result = await docClient.delete(params).promise();
 
             return {
                 resultCode: 0,
@@ -109,14 +88,7 @@ class UserDbAgent {
                     "user_id": user_id,
                 }
             }
-            const result = await new Promise((resolve, reject) => {
-                docClient.update(params, function (err, data) {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve(data);
-                });
-            })
+            const result = await docClient.update(params).promise();
 
             return {
                 resultCode: 0,
