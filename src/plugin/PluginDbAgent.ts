@@ -67,7 +67,7 @@ class PluginDbAgent {
         try {
             let params = {
                 TableName: table,
-                ProjectionExpression: "plugin_id",
+                ProjectionExpression: "plugin_id,manifest"
             }
             const result = await docClient.scan(params).promise();
 
